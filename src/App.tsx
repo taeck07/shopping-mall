@@ -2,6 +2,8 @@ import React from 'react';
 import './App.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ProductList } from './pages/ProductList';
 
 function App() {
 	const queryClient = new QueryClient({
@@ -14,7 +16,11 @@ function App() {
 	return (
 		<RecoilRoot>
 			<QueryClientProvider client={queryClient}>
-				<div className="App"></div>
+				<BrowserRouter>
+					<Routes>
+						<Route path="/" element={<ProductList />} />
+					</Routes>
+				</BrowserRouter>
 			</QueryClientProvider>
 		</RecoilRoot>
 	);

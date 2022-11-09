@@ -28,5 +28,7 @@ module.exports = {
 		'@typescript-eslint/explicit-function-return-type': 'warn',
 		'@typescript-eslint/strict-boolean-expressions': 'warn',
 		'@typescript-eslint/no-floating-promises': 'warn',
+		'@typescript-eslint/promise-function-async': 'warn',
+		'@typescript-eslint/prefer-nullish-coalescing': 'off',
 	},
 };
