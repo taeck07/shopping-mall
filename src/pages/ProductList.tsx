@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useProductInfinityQuery } from '../hooks/query/useProductInfinityQuery';
-import { Products } from 'components/Products';
+import { Products } from 'components/productList/Products';
 import { ProductType } from 'types/product';
+import { Layout } from '../components/common/Layout';
 
 export const ProductList = () => {
 	const { data, isLoading } = useProductInfinityQuery();
@@ -16,5 +17,10 @@ export const ProductList = () => {
 			) || [];
 		setProductList(list);
 	}, [data]);
-	return <Products productList={productList} isLoading={isLoading}></Products>;
+
+	return (
+		<Layout>
+			<Products productList={productList} isLoading={isLoading}></Products>
+		</Layout>
+	);
 };
