@@ -2,6 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { ProductType } from 'types/product';
 import LazyImageLoading from '../common/LazyImageLoading';
+import {
+	InfinityScroll,
+	InfinityScrollPropTypes,
+} from 'components/common/InfinityScroll';
 
 const ProductsContainer = styled.div`
 	display: grid;
@@ -39,7 +43,8 @@ const ProductDescription = styled.div`
 
 const BrandLink = styled.a`
 	color: #000 !important;
-	text-decoration: none;
+	text-decoratiimport { InfinityScrollPropTypes } from '../common/InfinityScroll';
+on: none;
 `;
 
 const GoodsName = styled.h3`
@@ -70,47 +75,53 @@ const OriginPrice = styled.span`
 	text-decoration: line-through;
 `;
 
-interface PropTypes {
+interface PropTypes extends InfinityScrollPropTypes {
 	productList: ProductType[];
-	isLoading: boolean;
 }
 
-export const Products = ({ productList, isLoading }: PropTypes) => {
+export const Products = ({
+	productList,
+	isLoading,
+	fetch,
+	hasNext,
+}: PropTypes) => {
 	return (
-		<ProductsContainer>
-			{productList.map(
-				({
-					goodsName,
-					goodsNo,
-					imageUrl,
-					brandName,
-					linkUrl,
-					price,
-					saleRate,
-					normalPrice,
-					isSoldOut,
-				}) => (
-					<ProductContent key={goodsNo}>
-						<ImageWrap>
-							<LazyImageLoading src={imageUrl} height="266px" />
-							{isSoldOut && (
-								<SoldoutCover>
-									<img src={require('assets/soldout.png')} />
-								</SoldoutCover>
-							)}
-						</ImageWrap>
-						<ProductDescription>
-							<BrandLink href={linkUrl}>{brandName}</BrandLink>
-							<GoodsName>{goodsName}</GoodsName>
-							<PriceWrap>
-								<span>{price}</span>
-								<span>{saleRate}%</span>
-							</PriceWrap>
-							<OriginPrice>{normalPrice}</OriginPrice>
-						</ProductDescription>
-					</ProductContent>
-				),
-			)}
-		</ProductsContainer>
+		<InfinityScroll isLoading={isLoading} fetch={fetch} hasNext={hasNext}>
+			<ProductsContainer>
+				{productList.map(
+					({
+						goodsName,
+						goodsNo,
+						imageUrl,
+						brandName,
+						linkUrl,
+						price,
+						saleRate,
+						normalPrice,
+						isSoldOut,
+					}) => (
+						<ProductContent key={goodsNo}>
+							<ImageWrap>
+								<LazyImageLoading src={imageUrl} height="266px" />
+								{isSoldOut && (
+									<SoldoutCover>
+										<img src={require('assets/soldout.png')} />
+									</SoldoutCover>
+								)}
+							</ImageWrap>
+							<ProductDescription>
+								<BrandLink href={linkUrl}>{brandName}</BrandLink>
+								<GoodsName>{goodsName}</GoodsName>
+								<PriceWrap>
+									<span>{price}</span>
+									<span>{saleRate}%</span>
+								</PriceWrap>
+								<OriginPrice>{normalPrice}</OriginPrice>
+							</ProductDescription>
+						</ProductContent>
+					),
+				)}
+			</ProductsContainer>
+		</InfinityScroll>
 	);
 };

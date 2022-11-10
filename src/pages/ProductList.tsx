@@ -6,7 +6,8 @@ import { Layout } from '../components/common/Layout';
 import { Filters } from 'components/productList/Filters';
 
 export const ProductList = () => {
-	const { data, isLoading } = useProductInfinityQuery();
+	const { data, isLoading, fetchNextPage, hasNextPage } =
+		useProductInfinityQuery();
 	const [productList, setProductList] = useState<ProductType[]>([]);
 
 	useEffect(() => {
@@ -25,7 +26,12 @@ export const ProductList = () => {
 				<Filters filterItem={[{ key: 'sales', label: '세일상품' }]} />
 			}
 		>
-			<Products productList={productList} isLoading={isLoading}></Products>
+			<Products
+				productList={productList}
+				isLoading={isLoading}
+				fetch={fetchNextPage}
+				hasNext={!!hasNextPage}
+			></Products>
 		</Layout>
 	);
 };
