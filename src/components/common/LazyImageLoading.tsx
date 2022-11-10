@@ -57,7 +57,6 @@ const LazyImageLoading = ({ src, style, height }: PropTypes) => {
 				ref={imgRef}
 				src={imgUrl}
 				style={style}
-				alt="car"
 				onError={() => handleError()}
 			/>
 		</Image>

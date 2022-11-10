@@ -16,6 +16,23 @@ const ProductContent = styled.div`
 	}
 `;
 
+const ImageWrap = styled.div`
+	height: 266px;
+	position: relative;
+`;
+
+const SoldoutCover = styled.div`
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: #ffffff80;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+`;
+
 const ProductDescription = styled.div`
 	padding: 20px 10px;
 `;
@@ -71,9 +88,17 @@ export const Products = ({ productList, isLoading }: PropTypes) => {
 					price,
 					saleRate,
 					normalPrice,
+					isSoldOut,
 				}) => (
 					<ProductContent key={goodsNo}>
-						<LazyImageLoading src={imageUrl} height="266px" />
+						<ImageWrap>
+							<LazyImageLoading src={imageUrl} height="266px" />
+							{isSoldOut && (
+								<SoldoutCover>
+									<img src={require('assets/soldout.png')} />
+								</SoldoutCover>
+							)}
+						</ImageWrap>
 						<ProductDescription>
 							<BrandLink href={linkUrl}>{brandName}</BrandLink>
 							<GoodsName>{goodsName}</GoodsName>
