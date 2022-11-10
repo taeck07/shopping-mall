@@ -42,7 +42,7 @@ export const Layout = ({ headerChildren, children }: PropTypes) => {
 					<LogoWrap>
 						<img src={require('assets/logo_musinsa.png')} />
 					</LogoWrap>
-					{headerChildren ? { headerChildren } : ''}
+					{headerChildren}
 				</>
 			</Header>
 			<Content>{children}</Content>
