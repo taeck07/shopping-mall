@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useProductInfinityQuery } from '../hooks/query/useProductInfinityQuery';
+import {
+	FilterTypes,
+	useProductInfinityQuery,
+} from '../hooks/query/useProductInfinityQuery';
 import { Products } from 'components/productList/Products';
 import { ProductType } from 'types/product';
 import { Layout } from '../components/common/Layout';
@@ -12,8 +15,9 @@ const filterItems = [
 ];
 
 export const ProductList = () => {
+	const [filters, setFilters] = useState<FilterTypes>({});
 	const { data, isLoading, fetchNextPage, hasNextPage } =
-		useProductInfinityQuery();
+		useProductInfinityQuery(filters);
 	const [productList, setProductList] = useState<ProductType[]>([]);
 
 	useEffect(() => {
@@ -25,6 +29,15 @@ export const ProductList = () => {
 			) || [];
 		setProductList(list);
 	}, [data]);
+
+	const _setFilters = (filter: string[]) => {
+		console.log('setfilter');
+		const filterObj: FilterTypes = {};
+		filter.forEach((key) => {
+			filterObj[key] = true;
+		});
+		setFilters(filterObj);
+	};
 
 	const searchCategory = useCallback(
 		(key: string) => {
@@ -50,7 +63,11 @@ export const ProductList = () => {
 	return (
 		<Layout
 			headerChildren={
-				<Filters filterItem={filterItems} getSearchCategory={searchCategory} />
+				<Filters
+					filterItem={filterItems}
+					getSearchCategory={searchCategory}
+					getFilteredProductList={_setFilters}
+				/>
 			}
 		>
 			<Products

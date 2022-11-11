@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToggleGroup } from 'components/common/ToggleGroup';
 import styled from 'styled-components';
 import { SearchBar } from './SearchBar';
@@ -47,9 +47,14 @@ interface PropTypes {
 	filterItem: ToggleType[];
 	value?: string[];
 	getSearchCategory: (key: string) => string[];
+	getFilteredProductList: (filter: string[]) => void;
 }
 
-const Filters = ({ filterItem, getSearchCategory }: PropTypes) => {
+const Filters = ({
+	filterItem,
+	getSearchCategory,
+	getFilteredProductList,
+}: PropTypes) => {
 	const [toggleValues, setToggleValues] = useState([]);
 	const [filteredList, setFilteredList] = useState<ToggleType[]>([]);
 	const onChange = (value: string[]) => {
@@ -65,6 +70,10 @@ const Filters = ({ filterItem, getSearchCategory }: PropTypes) => {
 		setFilteredList(filteredList.filter((item) => item.key !== key));
 		setToggleValues(toggleValues.filter((item) => item !== key));
 	};
+
+	useEffect(() => {
+		getFilteredProductList(filteredList.map(({ key }) => key));
+	}, [filteredList]);
 
 	return (
 		<FilterContainer>

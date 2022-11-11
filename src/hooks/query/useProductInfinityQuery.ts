@@ -4,11 +4,15 @@ import { ProductApi } from '../../services/api/productApi';
 import { ProductType } from 'types/product';
 import { InfinityQueryType } from 'types/common';
 
-export const useProductInfinityQuery = () => {
+export interface FilterTypes {
+	[key: string]: boolean | string;
+}
+
+export const useProductInfinityQuery = (filter: FilterTypes) => {
 	return useInfiniteQuery<InfinityQueryType<ProductType>>(
-		productKeys.getList(),
+		productKeys.getList(filter),
 		({ pageParam = 1 }) => {
-			return ProductApi.getList(pageParam);
+			return ProductApi.getList(filter, pageParam);
 		},
 		{
 			getNextPageParam: ({ currentPage }) => {
