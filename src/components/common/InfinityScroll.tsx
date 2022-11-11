@@ -29,7 +29,6 @@ export const InfinityScroll = ({
 	const handleScroll = throttle((e: UIEvent) => {
 		const { scrollTop, clientHeight, scrollHeight } =
 			e.target as HTMLDivElement;
-		console.log(e);
 		if (scrollTop + clientHeight + 50 >= scrollHeight) {
 			fetch();
 		}
