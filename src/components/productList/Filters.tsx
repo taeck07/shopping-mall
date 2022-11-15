@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ToggleGroup } from 'components/common/ToggleGroup';
 import styled from 'styled-components';
-import { SearchBar } from './SearchBar';
+import { SearchBar, SearchCaterogyType } from './SearchBar';
 import { ToggleType } from '../common/ToggleGroup';
 import RemoveIcon from 'assets/remove_filter.png';
+import { ProductType } from '../../types/product';
 
 const FilterContainer = styled.div`
 	width: 100%;
@@ -46,17 +47,20 @@ const FilterButton = styled.div`
 interface PropTypes {
 	filterItem: ToggleType[];
 	value?: string[];
-	getSearchCategory: (key: string) => string[];
-	getFilteredProductList: (filter: string[]) => void;
+	getSearchCategory: (key: string) => SearchCaterogyType[];
+	getFilteredProductList: (filter: string[], search?: string) => void;
+	getSearchProductList: (search: string, category?: keyof ProductType) => void;
 }
 
 const Filters = ({
 	filterItem,
 	getSearchCategory,
 	getFilteredProductList,
+	getSearchProductList,
 }: PropTypes) => {
 	const [toggleValues, setToggleValues] = useState([]);
 	const [filteredList, setFilteredList] = useState<ToggleType[]>([]);
+	const searchWord = useRef<string>('');
 	const onChange = (value: string[]) => {
 		setFilteredList(
 			value.map(
@@ -69,16 +73,25 @@ const Filters = ({
 	const handleFilterRemove = (key: string) => {
 		setFilteredList(filteredList.filter((item) => item.key !== key));
 		setToggleValues(toggleValues.filter((item) => item !== key));
+		if (key === 'search') {
+			searchWord.current = '';
+		}
 	};
 
 	useEffect(() => {
-		getFilteredProductList(filteredList.map(({ key }) => key));
+		getFilteredProductList(
+			filteredList.filter(({ key }) => key !== 'search').map(({ key }) => key),
+			searchWord.current,
+		);
 	}, [filteredList]);
 
 	return (
 		<FilterContainer>
 			<FilterWrap>
-				<SearchBar getSearchWord={getSearchCategory} />
+				<SearchBar
+					getSearchWord={getSearchCategory}
+					getSearchProductList={getSearchProductList}
+				/>
 				<ToggleGroup
 					value={toggleValues}
 					items={filterItem}

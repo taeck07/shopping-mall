@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { ProductType } from 'types/product';
 import { debounce } from 'utils';
 import useInputs from '../../hooks/common/useInputs';
 
@@ -61,6 +62,7 @@ const InputWrap = styled.div`
             &:focus {
                 outline: none !important;
             }import { debounce } from '../../utils/debounce';
+import { ProductType } from '../../types/product';
 
         }
         >img {
@@ -73,14 +75,34 @@ const InputWrap = styled.div`
 
 const ListWrap = styled.div``;
 
-interface PropTypes {
-	getSearchWord: (search: string) => string[];
+const CategoryItem = styled.button`
+	width: 100%;
+	padding: 15px 20px;
+	font-size: 1.272rem;
+	text-align: left;
+	border: 0;
+	background-color: #fff;
+`;
+
+export interface SearchCaterogyType {
+	label: string;
+	category: string;
 }
 
-export const SearchBar = ({ getSearchWord }: PropTypes) => {
+interface PropTypes {
+	getSearchWord: (search: string) => SearchCaterogyType[];
+	getSearchProductList: (search: string, category?: keyof ProductType) => void;
+}
+
+export const SearchBar = ({
+	getSearchWord,
+	getSearchProductList,
+}: PropTypes) => {
 	const [toggle, setToggle] = useState(false);
 	const [{ search }, onChange] = useInputs({ search: '' });
-	const [searchCategoryList, setSearchCategoryList] = useState<string[]>([]);
+	const [searchCategoryList, setSearchCategoryList] = useState<
+		SearchCaterogyType[]
+	>([]);
 
 	const handleToggle = () => {
 		setToggle(!toggle);
@@ -99,9 +121,25 @@ export const SearchBar = ({ getSearchWord }: PropTypes) => {
 		handleSearch(search);
 	}, [search]);
 
-	const handleKeypPress = (e: React.KeyboardEvent<HTMLInputElement>) => {};
+	const handleKeypPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			handleSearchItems(search);
+		}
+	};
 
-	const handleSearchItems = () => {};
+	const handleSearchItems = (word: string, category?: keyof ProductType) => {
+		setToggle(!toggle);
+		getSearchProductList(word, category);
+	};
+
+	const categoryName = useCallback((category: keyof ProductType) => {
+		switch (category) {
+			case 'goodsName':
+				return '상품명';
+			case 'brandName':
+				return '브랜드';
+		}
+	}, []);
 
 	return (
 		<SearchContainer>
@@ -123,10 +161,16 @@ export const SearchBar = ({ getSearchWord }: PropTypes) => {
 					</div>
 				</InputWrap>
 				<ListWrap>
-					{searchCategoryList.map((word, index) => (
-						<div key={index} onClick={() => handleSearchItems()}>
-							{word}
-						</div>
+					{searchCategoryList.map(({ label, category }, index) => (
+						<CategoryItem
+							key={index}
+							onClick={() =>
+								handleSearchItems(label, category as keyof ProductType)
+							}
+						>
+							<p>{label} </p>
+							<p>{categoryName(category as keyof ProductType)}</p>
+						</CategoryItem>
 					))}
 				</ListWrap>
 			</InputArea>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { ProductType } from 'types/product';
 import LazyImageLoading from '../common/LazyImageLoading';
@@ -6,6 +6,7 @@ import {
 	InfinityScroll,
 	InfinityScrollPropTypes,
 } from 'components/common/InfinityScroll';
+import { priceFormat } from 'utils/filters';
 
 const ProductsContainer = styled.div`
 	display: grid;
@@ -85,6 +86,10 @@ export const Products = ({
 	fetch,
 	hasNext,
 }: PropTypes) => {
+	const getPriceFormat = useCallback((price: number) => {
+		return priceFormat(price);
+	}, []);
+
 	return (
 		<InfinityScroll isLoading={isLoading} fetch={fetch} hasNext={hasNext}>
 			<ProductsContainer>
@@ -113,10 +118,10 @@ export const Products = ({
 								<BrandLink href={linkUrl}>{brandName}</BrandLink>
 								<GoodsName>{goodsName}</GoodsName>
 								<PriceWrap>
-									<span>{price}</span>
+									<span>{getPriceFormat(price)}</span>
 									<span>{saleRate}%</span>
 								</PriceWrap>
-								<OriginPrice>{normalPrice}</OriginPrice>
+								<OriginPrice>{getPriceFormat(normalPrice)}</OriginPrice>
 							</ProductDescription>
 						</ProductContent>
 					),
