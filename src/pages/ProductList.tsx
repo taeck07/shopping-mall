@@ -5,7 +5,7 @@ import {
 } from '../hooks/query/useProductInfinityQuery';
 import Products from 'components/productList/Products';
 import { ProductType } from 'types/product';
-import { Layout } from '../components/common/Layout';
+import Layout from '../components/common/Layout';
 import Filters from 'components/productList/Filters';
 import { SearchCaterogyType } from '../components/productList/SearchBar';
 
@@ -25,7 +25,7 @@ export const ProductList = () => {
 		category: undefined,
 	});
 
-	const getDataToProductList = (list: typeof data) => {
+	const getDataToProductList = useCallback((list: typeof data) => {
 		return (
 			list?.pages.reduce(
 				(prev: ProductType[], curr) =>
@@ -33,7 +33,7 @@ export const ProductList = () => {
 				[],
 			) || []
 		);
-	};
+	}, []);
 
 	useEffect(() => {
 		const allProducts = getDataToProductList(data);
@@ -51,15 +51,7 @@ export const ProductList = () => {
 		setFilters(filterObj);
 	}, []);
 
-	const getSearchProductList = useCallback(
-		(word: string, category?: keyof ProductType) => {
-			searchWord.current = { word, category: category };
-			setProductList(filterProductList(getDataToProductList(data)));
-		},
-		[data],
-	);
-
-	const filterProductList = (productList: ProductType[]) => {
+	const filterProductList = useCallback((productList: ProductType[]) => {
 		const { word, category } = searchWord.current;
 		return productList.filter((item) => {
 			const regexp = new RegExp(word, 'gi');
@@ -74,11 +66,19 @@ export const ProductList = () => {
 			}
 			return false;
 		});
-	};
+	}, []);
+
+	const getSearchProductList = useCallback(
+		(word: string, category?: keyof ProductType) => {
+			searchWord.current = { word, category: category };
+			setProductList(filterProductList(getDataToProductList(data)));
+		},
+		[data, getDataToProductList, filterProductList],
+	);
 
 	const searchCategory = useCallback(
 		(key: string) => {
-			const list: SearchCaterogyType[] = productList
+			const list: SearchCaterogyType[] = getDataToProductList(data)
 				.reduce<SearchCaterogyType[]>((pre, curr) => {
 					const regexp = new RegExp(key, 'gi');
 					if (regexp.test(curr.brandName)) {
@@ -100,7 +100,7 @@ export const ProductList = () => {
 				}));
 			return list;
 		},
-		[productList],
+		[data],
 	);
 
 	return (

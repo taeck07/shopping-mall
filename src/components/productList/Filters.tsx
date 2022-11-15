@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ToggleGroup } from 'components/common/ToggleGroup';
+import React, { useCallback, useEffect, useState } from 'react';
+import ToggleGroup from 'components/common/ToggleGroup';
 import styled from 'styled-components';
 import SearchBar, { SearchCaterogyType } from './SearchBar';
 import { ToggleType } from '../common/ToggleGroup';
@@ -24,6 +24,7 @@ const FilteredList = styled.div`
 	display: flex;
 	overflow-x: auto;
 	gap: 5px;
+	padding-bottom: 10px;
 `;
 
 const FilterItem = styled.div`
@@ -62,22 +63,28 @@ const Filters = ({
 	const [filteredList, setFilteredList] = useState<ToggleType[]>([]);
 	const [searchWord, setSearchWord] = useState<string>('');
 
-	const onChange = (value: string[]) => {
-		setFilteredList(
-			value.map(
-				(key) => filterItem.find((item) => item.key === key) as ToggleType,
-			),
-		);
-		setToggleValues(toggleValues);
-	};
+	const onChange = useCallback(
+		(value: string[]) => {
+			setFilteredList(
+				value.map(
+					(key) => filterItem.find((item) => item.key === key) as ToggleType,
+				),
+			);
+			setToggleValues(toggleValues);
+		},
+		[toggleValues],
+	);
 
-	const handleFilterRemove = (key: string) => {
-		setFilteredList(filteredList.filter((item) => item.key !== key));
-		setToggleValues(toggleValues.filter((item) => item !== key));
-		if (key === 'search') {
-			setSearchWord('');
-		}
-	};
+	const handleFilterRemove = useCallback(
+		(key: string) => {
+			setFilteredList(filteredList.filter((item) => item.key !== key));
+			setToggleValues(toggleValues.filter((item) => item !== key));
+			if (key === 'search') {
+				setSearchWord('');
+			}
+		},
+		[filteredList, toggleValues],
+	);
 
 	useEffect(() => {
 		getFilteredProductList(
@@ -86,13 +93,13 @@ const Filters = ({
 		);
 	}, [filteredList]);
 
-	const _getSearchProductList = (
-		word: string,
-		category?: keyof ProductType,
-	) => {
-		setSearchWord(word);
-		getSearchProductList(word, category);
-	};
+	const _getSearchProductList = useCallback(
+		(word: string, category?: keyof ProductType) => {
+			setSearchWord(word);
+			getSearchProductList(word, category);
+		},
+		[],
+	);
 
 	const handleSearchRemove = () => {
 		setSearchWord('');
