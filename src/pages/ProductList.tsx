@@ -53,16 +53,13 @@ export const ProductList = () => {
 
 	const getSearchProductList = useCallback(
 		(word: string, category?: keyof ProductType) => {
-			console.log('herrr');
 			searchWord.current = { word, category: category };
-			console.log(searchWord.current);
 			setProductList(filterProductList(getDataToProductList(data)));
 		},
 		[data],
 	);
 
 	const filterProductList = (productList: ProductType[]) => {
-		console.log('filter');
 		const { word, category } = searchWord.current;
 		return productList.filter((item) => {
 			const regexp = new RegExp(word, 'gi');
