@@ -92,13 +92,26 @@ interface PropTypes extends InfinityScrollPropTypes {
 	productList: ProductType[];
 }
 
-const Products = ({ productList, isLoading, fetch, hasNext }: PropTypes) => {
+const Products = ({
+	productList,
+	isLoading,
+	fetch,
+	hasNext,
+	isError,
+	length,
+}: PropTypes) => {
 	const getPriceFormat = useCallback((price: number) => {
 		return priceFormat(price);
 	}, []);
 
 	return (
-		<InfinityScroll isLoading={isLoading} fetch={fetch} hasNext={hasNext}>
+		<InfinityScroll
+			isLoading={isLoading}
+			fetch={fetch}
+			hasNext={hasNext}
+			isError={isError}
+			length={length}
+		>
 			<ProductsContainer>
 				{productList.map(
 					({

@@ -17,7 +17,7 @@ const filterItems = [
 
 export const ProductList = () => {
 	const [filters, setFilters] = useState<FilterTypes>({});
-	const { data, isLoading, fetchNextPage, hasNextPage } =
+	const { data, isFetching, fetchNextPage, hasNextPage, isError } =
 		useProductInfinityQuery(filters);
 	const [productList, setProductList] = useState<ProductType[]>([]);
 	const searchWord = useRef<{ word: string; category?: keyof ProductType }>({
@@ -116,9 +116,11 @@ export const ProductList = () => {
 		>
 			<Products
 				productList={productList}
-				isLoading={isLoading}
+				isLoading={isFetching}
 				fetch={fetchNextPage}
 				hasNext={!!hasNextPage}
+				isError={isError}
+				length={productList.length}
 			></Products>
 		</Layout>
 	);

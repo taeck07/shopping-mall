@@ -1,6 +1,18 @@
 import { client } from './client';
 import { FilterTypes } from '../../hooks/query/useProductInfinityQuery';
 
+const delay = (ms: number) => {
+	return new Promise(function (resolve, reject) {
+		setTimeout(() => {
+			try {
+				resolve(ms);
+			} catch (error) {
+				reject(error);
+			}
+		}, ms);
+	});
+};
+
 export const ProductApi = {
 	getList: async (filter: FilterTypes, pageParam: number, limit = 10) => {
 		const { data } = await client.get('/products?isSoldOut=false', {
@@ -10,6 +22,7 @@ export const ProductApi = {
 				...filter,
 			},
 		});
+		await delay(1000);
 		return {
 			result: data,
 			totalCount: 50,
