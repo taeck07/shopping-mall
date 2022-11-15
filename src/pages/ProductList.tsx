@@ -48,11 +48,6 @@ export const ProductList = () => {
 		filter.forEach((key) => {
 			filterObj[key] = true;
 		});
-		if (search) {
-			filterObj.goodsName_like = search || '';
-			filterObj.brandName_like = search || '';
-			return;
-		}
 		setFilters(filterObj);
 	};
 
