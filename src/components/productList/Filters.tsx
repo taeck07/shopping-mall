@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToggleGroup } from 'components/common/ToggleGroup';
 import styled from 'styled-components';
 import { SearchBar, SearchCaterogyType } from './SearchBar';
@@ -60,7 +60,8 @@ const Filters = ({
 }: PropTypes) => {
 	const [toggleValues, setToggleValues] = useState([]);
 	const [filteredList, setFilteredList] = useState<ToggleType[]>([]);
-	const searchWord = useRef<string>('');
+	const [searchWord, setSearchWord] = useState<string>('');
+
 	const onChange = (value: string[]) => {
 		setFilteredList(
 			value.map(
@@ -74,23 +75,36 @@ const Filters = ({
 		setFilteredList(filteredList.filter((item) => item.key !== key));
 		setToggleValues(toggleValues.filter((item) => item !== key));
 		if (key === 'search') {
-			searchWord.current = '';
+			setSearchWord('');
 		}
 	};
 
 	useEffect(() => {
 		getFilteredProductList(
 			filteredList.filter(({ key }) => key !== 'search').map(({ key }) => key),
-			searchWord.current,
+			searchWord,
 		);
 	}, [filteredList]);
+
+	const _getSearchProductList = (
+		word: string,
+		category?: keyof ProductType,
+	) => {
+		setSearchWord(word);
+		getSearchProductList(word, category);
+	};
+
+	const handleSearchRemove = () => {
+		setSearchWord('');
+		getSearchProductList('');
+	};
 
 	return (
 		<FilterContainer>
 			<FilterWrap>
 				<SearchBar
 					getSearchWord={getSearchCategory}
-					getSearchProductList={getSearchProductList}
+					getSearchProductList={_getSearchProductList}
 				/>
 				<ToggleGroup
 					value={toggleValues}
@@ -99,6 +113,14 @@ const Filters = ({
 				/>
 			</FilterWrap>
 			<FilteredList>
+				{searchWord && (
+					<FilterItem>
+						<span>{searchWord}</span>
+						<FilterButton onClick={() => handleSearchRemove()}>
+							<img src={RemoveIcon} />
+						</FilterButton>
+					</FilterItem>
+				)}
 				{filteredList.map((item) => (
 					<FilterItem key={item.key}>
 						<span>{item.label}</span>
