@@ -92,12 +92,7 @@ interface PropTypes extends InfinityScrollPropTypes {
 	productList: ProductType[];
 }
 
-export const Products = ({
-	productList,
-	isLoading,
-	fetch,
-	hasNext,
-}: PropTypes) => {
+const Products = ({ productList, isLoading, fetch, hasNext }: PropTypes) => {
 	const getPriceFormat = useCallback((price: number) => {
 		return priceFormat(price);
 	}, []);
@@ -144,3 +139,5 @@ export const Products = ({
 		</InfinityScroll>
 	);
 };
+
+export default React.memo(Products);

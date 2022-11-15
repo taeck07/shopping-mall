@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ToggleGroup } from 'components/common/ToggleGroup';
 import styled from 'styled-components';
-import { SearchBar, SearchCaterogyType } from './SearchBar';
+import SearchBar, { SearchCaterogyType } from './SearchBar';
 import { ToggleType } from '../common/ToggleGroup';
 import RemoveIcon from 'assets/remove_filter.png';
 import { ProductType } from '../../types/product';
@@ -134,4 +134,4 @@ const Filters = ({
 	);
 };
 
-export default Filters;
+export default React.memo(Filters);

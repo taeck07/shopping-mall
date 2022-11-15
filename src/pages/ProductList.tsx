@@ -3,7 +3,7 @@ import {
 	FilterTypes,
 	useProductInfinityQuery,
 } from '../hooks/query/useProductInfinityQuery';
-import { Products } from 'components/productList/Products';
+import Products from 'components/productList/Products';
 import { ProductType } from 'types/product';
 import { Layout } from '../components/common/Layout';
 import Filters from 'components/productList/Filters';
@@ -43,13 +43,13 @@ export const ProductList = () => {
 		setProductList(list);
 	}, [data]);
 
-	const _setFilters = (filter: string[], search?: string) => {
+	const _setFilters = useCallback((filter: string[]) => {
 		const filterObj: FilterTypes = {};
 		filter.forEach((key) => {
 			filterObj[key] = true;
 		});
 		setFilters(filterObj);
-	};
+	}, []);
 
 	const getSearchProductList = useCallback(
 		(word: string, category?: keyof ProductType) => {

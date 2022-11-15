@@ -94,10 +94,7 @@ interface PropTypes {
 	getSearchProductList: (search: string, category?: keyof ProductType) => void;
 }
 
-export const SearchBar = ({
-	getSearchWord,
-	getSearchProductList,
-}: PropTypes) => {
+const SearchBar = ({ getSearchWord, getSearchProductList }: PropTypes) => {
 	const [toggle, setToggle] = useState(false);
 	const [{ search }, onChange] = useInputs({ search: '' });
 	const [searchCategoryList, setSearchCategoryList] = useState<
@@ -177,3 +174,5 @@ export const SearchBar = ({
 		</SearchContainer>
 	);
 };
+
+export default React.memo(SearchBar);
