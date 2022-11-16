@@ -47,7 +47,7 @@ interface StateType {
 	[key: string]: boolean;
 }
 
-export const ToggleGroup = ({ items, value, onChange }: PropTypes) => {
+const ToggleGroup = ({ items, value, onChange }: PropTypes) => {
 	const [state, setState] = useState<StateType>({});
 
 	const handleClick = (key: string) => {
@@ -84,3 +84,5 @@ export const ToggleGroup = ({ items, value, onChange }: PropTypes) => {
 		</ToggleWrap>
 	);
 };
+
+export default React.memo(ToggleGroup);

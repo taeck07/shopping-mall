@@ -34,7 +34,7 @@ interface PropTypes {
 	headerChildren?: ReactNode;
 }
 
-export const Layout = ({ headerChildren, children }: PropTypes) => {
+const Layout = ({ headerChildren, children }: PropTypes) => {
 	return (
 		<Body>
 			<Header>
@@ -49,3 +49,5 @@ export const Layout = ({ headerChildren, children }: PropTypes) => {
 		</Body>
 	);
 };
+
+export default React.memo(Layout);
