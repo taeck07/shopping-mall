@@ -22,7 +22,7 @@ export const ProductApi = {
 				...filter,
 			},
 		});
-		await delay(1000);
+		await delay(500);
 		return {
 			result: data,
 			totalCount: 50,

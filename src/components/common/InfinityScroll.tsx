@@ -73,7 +73,13 @@ export const InfinityScroll = ({
 
 	const getStatus = useCallback(() => {
 		if (isError) {
-			return <StatusWrap className="error">error</StatusWrap>;
+			return (
+				<StatusWrap className="error">
+					에러가 발생하였습니다.
+					<br />
+					다시 시도해주세요.
+				</StatusWrap>
+			);
 		}
 		if (isLoading) {
 			return (
